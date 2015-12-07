@@ -1,0 +1,2 @@
+# convert image to virtubox format
+$ qemu-img convert -O vdi vda.img vda.vdi
