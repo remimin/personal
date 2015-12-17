@@ -1,0 +1,32 @@
+#!/bin/bash -x
+DEST=${HOME}
+STACK_USER=$(whoami)
+FILES=${DEST}/devstack/files
+ENABLED_SERVICES=s-proxy,s-object,s-container,s-account
+MYSQL_PASSWORD=e1a2c042c828d3566d0a
+RABBIT_PASSWORD=f7999d1955c5014aa32c
+SERVICE_TOKEN=be19c524ddc92109a224
+ADMIN_PASSWORD=3de4922d8b6ac5a1aad9
+SERVICE_PASSWORD=7de4162d826bc5a11ad9
+SWIFT_HASH=12go358snjw24501
+SWIFT_DEFAULT_BIND_PORT=7007
+REGION_NAME=RegionOne
+IDENTITY_API_VERSION=3
+DATA_DIR=/home/ubuntu/data
+SERVICE_DIR=/home/ubuntu/status
+SWIFT_SERVICE_PROTOCOL="http"
+SERVICE_LISTEN_ADDRESS=0.0.0.0
+SERVICE_HOST=192.168.106.128
+SWIFT_NODE_NUM=4
+SWIFT_LOOPBACK_DISK_SIZE_DEFAULT=6G
+SWIFT_SERVICE_LOCAL_HOST=127.0.0.1
+source ./openrc
+source ${DEST}/devstack/functions
+source ${DEST}/devstack/lib/tls
+source ${DEST}/devstack/lib/keystone
+source ${DEST}/devstack/lib/swift
+create_swift_disk
+#configure_swift
+#create_swift_accounts
+#init_swift
+#start_swift

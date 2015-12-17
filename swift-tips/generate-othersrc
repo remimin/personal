@@ -1,0 +1,34 @@
+#!/bin/bash -x
+timestemp=`date +%F-%H%M%S`
+devicenum=${DEV_NUM:-1}
+NL=`echo -ne '\015'`
+if [ -z ${devicenum} ];then
+  devicenum=1
+fi
+
+cat > /tmp/swift-others-screenrc << EOH
+sessionname swift
+hardstatus alwayslastline '%{= .} %-Lw%{= .}%> %n%f %t*%{= .}%+Lw%< %-=%{g}(%{d}%H/%l%{g})'
+setenv PROMPT_COMMAND /bin/true
+screen -t shell bash
+screen -t s-proxy bash
+stuff "/home/ubuntu/swift/bin/swift-proxy-server /etc/swift/proxy-server.conf -v${NL}"
+logfile /home/ubuntu/logs/s-proxy.log.${timestemp}
+log on
+EOH
+for i in `seq 1 ${devicenum}`;do
+  cat >>/tmp/swift-screenrc << EOH
+screen -t s-object-${i} bash
+stuff "/home/ubuntu/swift/bin/swift-object-server /etc/swift/object-server/${i}.conf -v$NL"
+logfile /home/ubuntu/logs/s-object.log.${timestemp}
+log on
+screen -t s-container-${i} bash
+stuff "/home/ubuntu/swift/bin/swift-container-server /etc/swift/container-server/${i}.conf -v$NL"
+logfile /home/ubuntu/logs/s-container.log.${timestemp}
+log on
+screen -t s-account-${i} bash
+stuff "/home/ubuntu/swift/bin/swift-account-server /etc/swift/account-server/${i}.conf -v$NL"
+logfile /home/ubuntu/logs/s-account.log.${timestemp}
+log on
+EOH
+done

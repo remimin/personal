@@ -1,0 +1,1 @@
+sudo mount -t xfs -o loop,noatime,nodiratime,nobarrier,logbufs=8 /home/ubuntu/data/swift/drives/images/swift.img /home/ubuntu/data/swift/drives/sdb1

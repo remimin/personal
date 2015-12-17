@@ -1,0 +1,5 @@
+#!/bin/bash -x
+#export NL=`echo -ne '\015'`
+export DEV_NUM=${1:-1}
+./generate-screenrc
+exec screen -c /tmp/swift-screenrc
