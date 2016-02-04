@@ -1,0 +1,24 @@
+SWIFT_PARTITION_POWER_SIZE=${1:-9}
+SWIFT_REPLICAS=${2:-1}
+SWIFT_SERVICE_LOCAL_HOST='127.0.0.1'
+OBJECT_PORT_BASE=6010
+CONTAINER_PORT_BASE=6011
+ACCOUNT_PORT_BASE=6012
+SWIFT_REPLICAS_SEQ=`seq 1 4`
+
+pushd /etc/swift
+rm -f *.builder *.ring.gz backups/*.builder backups/*.ring.gz
+
+swift-ring-builder object.builder create ${SWIFT_PARTITION_POWER_SIZE} ${SWIFT_REPLICAS} 1
+swift-ring-builder container.builder create ${SWIFT_PARTITION_POWER_SIZE} ${SWIFT_REPLICAS} 1
+swift-ring-builder account.builder create ${SWIFT_PARTITION_POWER_SIZE} ${SWIFT_REPLICAS} 1
+
+for node_number in ${SWIFT_REPLICAS_SEQ}; do
+    swift-ring-builder object.builder add z${node_number}-${SWIFT_SERVICE_LOCAL_HOST}:$(( OBJECT_PORT_BASE + 10 * (node_number - 1) ))/sdb1 1
+    swift-ring-builder container.builder add z${node_number}-${SWIFT_SERVICE_LOCAL_HOST}:$(( CONTAINER_PORT_BASE + 10 * (node_number - 1) ))/sdb1 1
+    swift-ring-builder account.builder add z${node_number}-${SWIFT_SERVICE_LOCAL_HOST}:$(( ACCOUNT_PORT_BASE + 10 * (node_number - 1) ))/sdb1 1
+done
+swift-ring-builder object.builder rebalance
+swift-ring-builder container.builder rebalance
+swift-ring-builder account.builder rebalance
+popd
