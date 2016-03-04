@@ -24,15 +24,15 @@ for i in `seq 1 ${devicenum}`;do
   cat >>/tmp/swift-screenrc << EOH
 screen -t s-object-${i} bash
 stuff "/home/rminmin/openstack/swift/bin/swift-object-server /etc/swift/object-server/${i}.conf -v$NL"
-logfile /home/rminmin/openstack/logs/s-object.log.${timestemp}
+logfile /home/rminmin/openstack/logs/s-object-${i}.log.${timestemp}
 log on
 screen -t s-container-${i} bash
 stuff "/home/rminmin/openstack/swift/bin/swift-container-server /etc/swift/container-server/${i}.conf -v$NL"
-logfile /home/rminmin/openstack/logs/s-container.log.${timestemp}
+logfile /home/rminmin/openstack/logs/s-container-${i}.log.${timestemp}
 log on
 screen -t s-account-${i} bash
 stuff "/home/rminmin/openstack/swift/bin/swift-account-server /etc/swift/account-server/${i}.conf -v$NL"
-logfile /home/rminmin/openstack/logs/s-account.log.${timestemp}
+logfile /home/rminmin/openstack/logs/s-account-${i}.log.${timestemp}
 log on
 EOH
 done
