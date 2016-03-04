@@ -4,7 +4,7 @@ bind_port = 7007
 # bind_timeout = 30
 # backlog = 4096
 swift_dir = /etc/swift
-user = ubuntu
+user = rminmin
 
 # Enables exposing configuration settings via HTTP GET /info.
 # expose_info = true
@@ -63,7 +63,7 @@ log_level = DEBUG
 # log_udp_port = 514
 #
 # You can enable StatsD logging here:
-# log_statsd_host = localhost
+# log_statsd_host =
 # log_statsd_port = 8125
 # log_statsd_default_sample_rate = 1.0
 # log_statsd_sample_rate_factor = 1.0
@@ -79,12 +79,12 @@ log_level = DEBUG
 [pipeline:main]
 # This sample pipeline uses tempauth and is used for SAIO dev work and
 # testing. See below for a pipeline using keystone.
-pipeline = catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk tempurl ratelimit crossdomain authtoken keystoneauth tempauth  formpost staticweb container-quotas account-quotas slo dlo versioned_writes proxy-logging  proxy-server
+#pipeline = catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk tempurl ratelimit crossdomain tempauth  formpost staticweb container-quotas account-quotas slo dlo versioned_writes proxy-logging  proxy-server
 
 # The following pipeline shows keystone integration. Comment out the one
 # above and uncomment this one. Additional steps for integrating keystone are
 # covered further below in the filter sections for authtoken and keystoneauth.
-#pipeline = catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk tempurl ratelimit authtoken keystoneauth container-quotas account-quotas slo dlo versioned_writes proxy-logging proxy-server
+pipeline = catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk tempurl ratelimit authtoken keystoneauth container-quotas account-quotas slo dlo versioned_writes proxy-logging proxy-server
 
 [app:proxy-server]
 account_autocreate = true
@@ -173,9 +173,6 @@ use = egg:swift#proxy
 # If the "timing" sorting_method is used, the timings will only be valid for
 # the number of seconds configured by timing_expiry.
 # timing_expiry = 300
-#
-# The maximum time (seconds) that a large object connection is allowed to last.
-# max_large_object_get_time = 86400
 #
 # Set to the number of nodes to contact for a normal request. You can use
 # '* replicas' at the end to have it use the number given times the number of
@@ -293,13 +290,13 @@ user_test5_tester5 = testing5 service
 # You'll also need to have the keystoneauth middleware enabled and have it in
 # your main pipeline, as show in the sample pipeline at the top of this file.
 #
-# [filter:authtoken]
-# paste.filter_factory = keystonemiddleware.auth_token:filter_factory
-# identity_uri = http://keystonehost:35357/
-# auth_uri = http://keystonehost:5000/
-# admin_tenant_name = service
-# admin_user = swift
-# admin_password = password
+#[filter:authtoken]
+#paste.filter_factory = keystonemiddleware.auth_token:filter_factory
+#identity_uri = http://192.168.56.102:35357/
+#auth_uri = http://192.168.56.102:5000/
+#admin_tenant_name = service
+#admin_user = swift
+#admin_password = 7de4162d826bc5a11ad9
 #
 # delay_auth_decision defaults to False, but leaving it as false will
 # prevent other auth systems, staticweb, tempurl, formpost, and ACLs from
@@ -309,8 +306,8 @@ user_test5_tester5 = testing5 service
 # cache = swift.cache
 # include_service_catalog = False
 #
-# [filter:keystoneauth]
-# use = egg:swift#keystoneauth
+[filter:keystoneauth]
+use = egg:swift#keystoneauth
 # The reseller_prefix option lists account namespaces that this middleware is
 # responsible for. The prefix is placed before the Keystone project id.
 # For example, for project 12345678, and prefix AUTH, the account is
@@ -321,7 +318,7 @@ user_test5_tester5 = testing5 service
 # prefixes, a value of '' (two single quote characters) indicates a
 # blank/empty prefix. Except for the blank/empty prefix, an underscore ('_')
 # character is appended to the value unless already present.
-reseller_prefix = TEMPAUTH
+reseller_prefix = AUTH
 #
 # The user must have at least one role named by operator_roles on a
 # project in order to create, delete and modify containers and objects
@@ -332,16 +329,16 @@ reseller_prefix = TEMPAUTH
 # path). If you omit the prefix, the option applies to all reseller
 # prefix items. For the blank/empty prefix, prefix with '' (do not put
 # underscore after the two single quote characters).
-# operator_roles = admin, swiftoperator
+operator_roles = admin, swiftoperator
 #
 # The reseller admin role has the ability to create and delete accounts
-# reseller_admin_role = ResellerAdmin
+reseller_admin_role = ResellerAdmin
 #
 # This allows middleware higher in the WSGI pipeline to override auth
 # processing, useful for middleware such as tempurl and formpost. If you know
 # you're not going to use such middleware and you want a bit of extra security,
 # you can set this to false.
-# allow_overrides = true
+allow_overrides = true
 #
 # If is_admin is true, a user whose username is the same as the project name
 # and who has any role on the project will have access rights elevated to be
@@ -366,7 +363,7 @@ reseller_prefix = TEMPAUTH
 # are in the default domain i.e the domain to which existing tenants are
 # migrated. The default_domain_id value configured here should be the same as
 # the value used during migration of tenants to keystone domains.
-# default_domain_id = default
+default_domain_id = default
 #
 # For a new installation, or an installation in which keystone projects may
 # move between domains, you should disable backwards compatible name matching
@@ -394,7 +391,8 @@ use = egg:swift#memcache
 # If not set here, the value for memcache_servers will be read from
 # memcache.conf (see memcache.conf-sample) or lacking that file, it will
 # default to the value below. You can specify multiple servers separated with
-# commas, as in: 10.1.2.3:11211,10.1.2.4:11211
+# commas, as in: 10.1.2.3:11211,10.1.2.4:11211 (IPv6 addresses must
+# follow rfc3986 section-3.2.2, i.e. [::1]:11211)
 # memcache_servers = 127.0.0.1:11211
 #
 # Sets how memcache values are serialized and deserialized:
@@ -575,7 +573,7 @@ use = egg:swift#proxy_logging
 # access_log_udp_port = 514
 #
 # You can use log_statsd_* from [DEFAULT] or override them here:
-# access_log_statsd_host = localhost
+# access_log_statsd_host =
 # access_log_statsd_port = 8125
 # access_log_statsd_default_sample_rate = 1.0
 # access_log_statsd_sample_rate_factor = 1.0
@@ -635,14 +633,17 @@ use = egg:swift#bulk
 use = egg:swift#slo
 # max_manifest_segments = 1000
 # max_manifest_size = 2097152
-# min_segment_size = 1048576
-# Start rate-limiting SLO segment serving after the Nth segment of a
+#
+# Rate limiting applies only to segments smaller than this size (bytes).
+# rate_limit_under_size = 1048576
+#
+# Start rate-limiting SLO segment serving after the Nth small segment of a
 # segmented object.
 # rate_limit_after_segment = 10
 #
 # Once segment rate-limiting kicks in for an object, limit segments served
 # to N per second. 0 means no rate-limiting.
-# rate_limit_segments_per_sec = 0
+# rate_limit_segments_per_sec = 1
 #
 # Time limit on GET requests (seconds)
 # max_get_time = 86400
@@ -741,22 +742,19 @@ use = egg:swift#crossdomain
 include_service_catalog = False
 cache = swift.cache
 delay_auth_decision = 1
+memcache_servers = 192.168.56.102:11211
 signing_dir = /var/cache/swift
 cafile = 
-auth_uri = http://192.168.106.128:5000
+auth_url = http://192.168.56.102:35357/v3
 project_domain_id = default
 project_name = service
-#user_domain_id = default
-#password = 7de4162d826bc5a11ad9
-#username = swift
-auth_url = http://192.168.106.128:35357
-identity_uri = http://192.168.106.128:35357
+user_domain_id = default
+password = 7de4162d826bc5a11ad9
+username = swift
+identity_uri = http://192.168.56.102:35357
 auth_type = password
 paste.filter_factory = keystonemiddleware.auth_token:filter_factory
 log_name = swift
-admin_password = 7de4162d826bc5a11ad9
-admin_user = swift
-admin_tenant_name = service
 
 [filter:keystoneauth]
 operator_roles = Member, admin

@@ -1,5 +1,5 @@
-export OS_PASSWORD=3de4922d8b6ac5a1aad9
-export OS_AUTH_URL=http://192.168.106.128:35357
+export OS_PASSWORD=4bb3408d17fb14b39336
+export OS_AUTH_URL=http://192.168.56.102:35357
 export OS_USERNAME=admin
 export OS_TENANT_NAME=admin
 export OS_USER_DOMAIN_ID=default

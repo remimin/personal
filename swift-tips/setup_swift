@@ -1,5 +1,5 @@
 #!/bin/bash -x
-DEST=${HOME}
+DEST=${HOME}/openstack
 STACK_USER=$(whoami)
 FILES=${DEST}/devstack/files
 ENABLED_SERVICES=s-proxy,s-object,s-container,s-account
@@ -12,11 +12,11 @@ SWIFT_HASH=12go358snjw24501
 SWIFT_DEFAULT_BIND_PORT=7007
 REGION_NAME=RegionOne
 IDENTITY_API_VERSION=3
-DATA_DIR=/home/ubuntu/data
-SERVICE_DIR=/home/ubuntu/status
+DATA_DIR=${DEST}/data
+SERVICE_DIR=${DEST}/status
 SWIFT_SERVICE_PROTOCOL="http"
 SERVICE_LISTEN_ADDRESS=0.0.0.0
-SERVICE_HOST=192.168.106.128
+SERVICE_HOST=192.168.56.102
 SWIFT_NODE_NUM=4
 SWIFT_LOOPBACK_DISK_SIZE_DEFAULT=6G
 SWIFT_SERVICE_LOCAL_HOST=127.0.0.1
@@ -26,7 +26,7 @@ source ${DEST}/devstack/lib/tls
 source ${DEST}/devstack/lib/keystone
 source ${DEST}/devstack/lib/swift
 create_swift_disk
-#configure_swift
-#create_swift_accounts
-#init_swift
+configure_swift
+create_swift_accounts
+init_swift
 #start_swift
