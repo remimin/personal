@@ -1,34 +1,35 @@
 #!/bin/bash -x
 timestemp=`date +%F-%H%M%S`
-devicenum=${DEV_NUM:-1}
+devicenum=${DEV_NUM:-4}
+S_TYPE=${1}
+if [ -z $S_TYPE ];then
+   echo "need service type: e.g. replicator"
+   exit
+fi
+S_DIR=${HOME}/openstack/swift/bin
 NL=`echo -ne '\015'`
 if [ -z ${devicenum} ];then
-  devicenum=1
+  devicenum=4
 fi
 
-cat > /tmp/swift-others-screenrc << EOH
-sessionname swift
+cat > /tmp/swift-${S_TYPE}-screenrc << EOH
+sessionname swift-${S_TYPE}
 hardstatus alwayslastline '%{= .} %-Lw%{= .}%> %n%f %t*%{= .}%+Lw%< %-=%{g}(%{d}%H/%l%{g})'
 setenv PROMPT_COMMAND /bin/true
-screen -t shell bash
-screen -t s-proxy bash
-stuff "/home/ubuntu/swift/bin/swift-proxy-server /etc/swift/proxy-server.conf -v${NL}"
-logfile /home/ubuntu/logs/s-proxy.log.${timestemp}
-log on
 EOH
 for i in `seq 1 ${devicenum}`;do
-  cat >>/tmp/swift-screenrc << EOH
+  cat >>/tmp/swift-${S_TYPE}-screenrc << EOH
 screen -t s-object-${i} bash
-stuff "/home/ubuntu/swift/bin/swift-object-server /etc/swift/object-server/${i}.conf -v$NL"
-logfile /home/ubuntu/logs/s-object.log.${timestemp}
+stuff "${S_DIR}/swift-object-${S_TYPE} /etc/swift/object-server/${i}.conf -v${NL}"
+logfile /home/ubuntu/logs/s-object-${S_TYPE}-${i}.log.${timestemp}
 log on
 screen -t s-container-${i} bash
-stuff "/home/ubuntu/swift/bin/swift-container-server /etc/swift/container-server/${i}.conf -v$NL"
-logfile /home/ubuntu/logs/s-container.log.${timestemp}
+stuff "${S_DIR}/swift-container-${S_TYPE} /etc/swift/container-server/${i}.conf -v$NL"
+logfile /home/ubuntu/logs/s-container-${S_TYPE}-${i}.log.${timestemp}
 log on
 screen -t s-account-${i} bash
-stuff "/home/ubuntu/swift/bin/swift-account-server /etc/swift/account-server/${i}.conf -v$NL"
-logfile /home/ubuntu/logs/s-account.log.${timestemp}
+stuff "${S_DIR}/swift-account-${S_TYPE} /etc/swift/account-server/${i}.conf -v$NL"
+logfile /home/ubuntu/logs/s-account-${S_TYPE}-${i}.log.${timestemp}
 log on
 EOH
 done

@@ -6,3 +6,6 @@ swift-ring-builder account.builder
 # Reset replicas 
 swift-ring-builder container.builder set_replicas 1
 swift-ring-builder container.builder rebalance
+
+# Get nodes
+swift-get-nodes <ring.gz> <account> [<container> [<object>]]
