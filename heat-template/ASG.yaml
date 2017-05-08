@@ -53,7 +53,7 @@ resources:
           key_name: {get_param: key}
           network_id: {get_param: network_id}
           pool_id: {get_resource: pool}
-          metadata: {"metering.stack": {get_param: "OS::stack_id"}}
+          metadata: {"server_group": {get_param: "OS::stack_id"}}
           availability_zone: {get_param: AZ}
           user_data: ''
           server_group: {get_resource: servergroup}
@@ -84,7 +84,10 @@ resources:
       threshold: 30
       comparison_operator: gt
       alarm_actions:
-        - {get_attr: [scale_up_policy, signal_url]}
+        - str_replace:
+            template: "trust+url"
+            params:
+              "url": {get_attr: [scale_up_policy, signal_url]}
       resource_type: instance
       query:
         str_replace:
@@ -102,7 +105,10 @@ resources:
       threshold: 10
       comparison_operator: lt
       alarm_actions:
-        - {get_attr: [scale_down_policy, signal_url]}
+        - str_replace:
+            template: "trust+url"
+            params:
+              "url": {get_attr: [scale_down_policy, signal_url]}
       resource_type: instance
       query:
         str_replace:
