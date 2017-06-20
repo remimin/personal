@@ -1,0 +1,21 @@
+{ "name":"test_composite_16",
+  "type": "composite",
+  "insufficient_data_actions": [ "trust+conf:///test" ],
+  "ok_actions": [ "trust+conf:///test" ],
+  "alarm_actions": [ "trust+conf:///test" ],
+  "composite_rule":
+  {"or": [ 
+                {
+                       "evaluation_periods": 3,
+                       "metric":"memory.usage",
+                       "aggregation_method": "mean",
+                       "granularity": 60,
+                       "threshold": 100,
+                       "comparison_operator": "gt",
+                       "resource_type": "instance",
+                       "resource_id": "60dc77af-f8ba-4104-98fa-3e730bcb78fa",
+                       "type": "gnocchi_resources_threshold"
+               }
+           ]
+      }
+}

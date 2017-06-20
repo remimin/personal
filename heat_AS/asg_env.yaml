@@ -1,0 +1,9 @@
+resource_registry: lb_server.yaml
+  
+  image: fe32738d-ce85-4cff-a07c-6edf5ddb4e55
+  key: minmin
+  flavor: m1.small
+  network: cc49211f-5c59-497f-a825-ec161fad0875
+  subnet_id: bcd8e726-4a6d-4f8e-af90-1a64be648419
+  external_network_id: b71cd434-bc1e-4786-95ff-32ee54a0a29b
+  availability_zone: "nova:server-31"

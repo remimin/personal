@@ -1,0 +1,37 @@
+{ "name":"test_composite_14",
+  "type": "composite",
+  "repeat_actions": "true",
+  "repeat_times": "100",
+  "insufficient_data_actions": [ "trust+conf:///test" ],
+  "ok_actions": [ "trust+conf:///test" ],
+  "alarm_actions": [ "trust+conf:///test" ],
+  "composite_rule":
+  {"or": [ 
+          {
+            "and":[
+                {
+                       "evaluation_periods": 3,
+                       "metric":"memory.usage",
+                       "aggregation_method": "mean",
+                       "granularity": 60,
+                       "threshold": 100,
+                       "comparison_operator": "gt",
+                       "resource_type": "instance",
+                       "resource_id": "60dc77af-f8ba-4104-98fa-3e730bcb78fa",
+                       "type": "gnocchi_resources_threshold"
+               },
+               {
+                       "evaluation_periods": 3,
+                       "metric":"memory.usage",
+                       "aggregation_method": "mean",
+                       "granularity": 60,
+                       "threshold": 1000000,
+                       "comparison_operator": "lt",
+                       "resource_type": "instance",
+                       "resource_id": "60dc77af-f8ba-4104-98fa-3e730bcb78fa",
+                       "type": "gnocchi_resources_threshold"
+               }
+           ]
+      }
+   ]}
+}

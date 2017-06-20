@@ -1,0 +1,170 @@
+heat_template_version: 2013-05-23
+description: AutoScaling
+parameters:
+  image:
+    type: string
+    description: image UUID 
+    default: fe32738d-ce85-4cff-a07c-6edf5ddb4e55
+  key:
+    type: string
+    description: key pair name
+    default: minmin
+  flavor:
+    type: string
+    description: instance flavor
+    default: m1.small
+  network_id:
+    type: string
+    description: instance network uuid
+    default: cc49211f-5c59-497f-a825-ec161fad0875
+  subnet_id:
+    type: string
+    description: instance subnetwork uuid
+    default: bcd8e726-4a6d-4f8e-af90-1a64be648419
+  external_network_id:
+    type: string
+    description: Public network UUID
+    default: b71cd434-bc1e-4786-95ff-32ee54a0a29b
+  AZ:
+    type: string
+    description: availability zone
+    default: "nova:server-31"
+  lb_port:
+    type: number
+    description: Loadbalancer protocol port
+    default: 80
+resources:
+  servergroup:
+    type: OS::Nova::ServerGroup
+    properties:
+      name: {get_param: "OS::stack_id"}
+      policies: 
+        - "affinity" 
+  asg:
+    type: OS::Heat::AutoScalingGroup
+    properties:
+      min_size: 1
+      max_size: 3
+      resource:
+        type: lb_server.yaml
+        properties:
+          flavor: {get_param: flavor}
+          image: {get_param: image}
+          key_name: {get_param: key}
+          network_id: {get_param: network_id}
+          pool_id: {get_resource: pool}
+          metadata: {"metering.stack": {get_param: "OS::stack_id"}}
+          availability_zone: {get_param: AZ}
+          user_data: ''
+          server_group: {get_resource: servergroup}
+          lb_port: {get_param: lb_port}
+          subnet: {get_param: subnet_id}
+  scale_up_policy:
+    type: OS::Heat::ScalingPolicy
+    properties: 
+      adjustment_type: change_in_capacity
+      auto_scaling_group_id: {get_resource: asg}
+      cooldown: 60
+      scaling_adjustment: 1
+  scale_down_policy:
+    type: OS::Heat::ScalingPolicy
+    properties:
+      adjustment_type: change_in_capacity
+      auto_scaling_group_id: {get_resource: asg}
+      cooldown: 60
+      scaling_adjustment: -1
+  cpu_alarm_high:
+    type: OS::Ceilometer::GnocchiAggregationByResourcesAlarm
+    properties:
+      description: Scale-up if the last CPU > 50% for 1 minute
+      metric: cpu_util
+      aggregation_method: max
+      granularity: 1
+      evaluation_periods: 5
+      threshold: 30
+      comparison_operator: gt
+      alarm_actions:
+        - {get_attr: [scale_up_policy, alarm_url]}
+      resource_type: instance
+      query:
+        str_replace:
+          template: '{"=": {"server_group": "stack_id"}}'
+          params:
+            stack_id: {get_param: "OS::stack_id"}
+  cpu_alarm_low:
+    type: OS::Ceilometer::GnocchiAggregationByResourcesAlarm
+    properties:
+      description: Scale-up if the last CPU > 50% for 1 minute
+      metric: cpu_util
+      aggregation_method: min
+      granularity: 1
+      evaluation_periods: 5
+      threshold: 10
+      comparison_operator: lt
+      alarm_actions:
+        - {get_attr: [scale_up_policy, alarm_url]}
+      resource_type: instance
+      query:
+        str_replace:
+          template: '{"=": {"server_group": "stack_id"}}'
+          params:
+            stack_id: {get_param: "OS::stack_id"}
+  monitor:
+    type: OS::Neutron::LBaaS::HealthMonitor
+    properties:
+      type: TCP
+      delay: 5
+      max_retries: 5
+      timeout: 5
+      pool: {get_resource: pool}
+
+  pool:
+    type: OS::Neutron::LBaaS::Pool
+    properties:
+      protocol: HTTP
+      lb_algorithm: ROUND_ROBIN
+      listener: { get_resource: listener}
+
+  listener:
+    type: OS::Neutron::LBaaS::Listener
+    properties:
+      loadbalancer: { get_resource: lb}
+      protocol: HTTP
+      protocol_port: { get_param: lb_port }
+
+  lb:
+    type: OS::Neutron::LBaaS::LoadBalancer
+    properties:
+      vip_subnet: {get_param: subnet_id}
+
+  lb_floating:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network_id: {get_param: external_network_id}
+      port_id: {get_attr: [lb, vip_port_id]}
+outputs:
+  scale_up_url:
+    description: >
+      This URL is the webhook to scale up the autoscaling group.  You
+      can invoke the scale-up operation by doing an HTTP POST to this
+      URL; no body nor extra headers are needed.
+    value: {get_attr: [scale_up_policy, alarm_url]}
+  scale_dn_url:
+    description: >
+      This URL is the webhook to scale down the autoscaling group.
+      You can invoke the scale-down operation by doing an HTTP POST to
+      this URL; no body nor extra headers are needed.
+    value: {get_attr: [scale_down_policy, alarm_url]}
+  lb_vip_address:
+    value: {get_attr: [lb, vip_address]}
+    description: The IP address of the load balancing pool
+  lb_url:
+    value:
+      str_replace:
+        template: http://IP_ADDRESS:PORT
+        params:
+          IP_ADDRESS: { get_attr: [ lb_floating, floating_ip_address ] }
+          PORT: { get_param: lb_port }
+    description: >
+      This URL is the "external" URL that can be used to access the
+      load balancer.

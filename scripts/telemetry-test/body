@@ -1,0 +1,19 @@
+{
+    "gnocchi_resources_threshold": {
+        "evaluation_periods": 5,
+        "metric":"f6571777-e87a-4cc1-9226-b8569ca2966e",
+        "aggregation_method": "mean",
+        "granularity": "60",
+        "threshold": 1000000,
+        "comparison_operator": "lt",
+        "resource_id": "test",
+        "resource_type": "test"
+    },
+    "alarm_actions": [
+        "log://"
+    ],
+    "repeat_actions": "true",
+    "repeat_times": "3",
+    "name": "test_gnocchi_rule",
+    "type": "gnocchi_aggregation_by_metrics_threshold"
+}

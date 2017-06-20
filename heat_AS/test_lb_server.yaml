@@ -1,0 +1,76 @@
+heat_template_version: 2013-05-23
+description: A load-balancer server
+parameters:
+  image:
+    type: string
+    description: Image used for servers
+    default: fe32738d-ce85-4cff-a07c-6edf5ddb4e55
+  key_name:
+    type: string
+    description: SSH key to connect to the servers
+    default: minmin
+  flavor:
+    type: string
+    description: flavor used by the servers
+    default: m1.small
+  pool_id:
+    type: string
+    description: Pool to contact
+    default: 6d5e21e0-db19-4e99-8548-e0545dee949c
+  user_data:
+    type: string
+    description: Server user_data
+    default: ''
+  metadata:
+    type: json
+    default: {}
+  network_id:
+    type: string
+    description: Network used by the server
+    default: cc49211f-5c59-497f-a825-ec161fad0875
+  server_group:
+    type: string
+    description: Server group UUID
+    default: a7549031-f6c3-44ca-adc7-74dee04e1000
+  availability_zone:
+    type: string
+    description: Availability zone
+    default: "nova:server-31"
+  lb_port:
+    type: number
+    description: lb member protocol port
+    default: 80
+  subnet:
+    type: string
+    description: subnet uuid
+    default: bcd8e726-4a6d-4f8e-af90-1a64be648419
+
+resources:
+  server:
+    type: OS::Nova::Server
+    properties:
+      flavor: {get_param: flavor}
+      image: {get_param: image}
+      key_name: {get_param: key_name}
+      metadata: {get_param: metadata}
+      user_data: {get_param: user_data}
+      user_data_format: RAW
+      networks:
+        - network: {get_param: network_id}
+      availability_zone: {get_param: availability_zone}
+      scheduler_hints: {group: {get_param: server_group}}
+  member:
+    type: OS::Neutron::LBaaS::PoolMember
+    properties:
+      pool: {get_param: pool_id}
+      address: {get_attr: [server, first_address]}
+      protocol_port: {get_param: lb_port}
+      subnet: { get_param: subnet }
+
+outputs:
+  server_ip:
+    description: IP Address of the load-balanced server.
+    value: { get_attr: [server, first_address] }
+  lb_member:
+    description: LB member details.
+    value: { get_attr: [member, show] }

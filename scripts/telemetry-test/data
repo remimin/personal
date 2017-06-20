@@ -1,0 +1,303 @@
+{"ae462676-2728-4b34-a59e-e252a91aa936":[
+    {
+      "timestamp": "2017-02-24T07:00:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:01:12",
+      "granularity": 60,
+      "value": 30000
+    },
+    {
+      "timestamp": "2017-02-24T07:02:12",
+      "granularity": 60,
+      "value": 30000
+    },
+    {
+      "timestamp": "2017-02-24T07:03:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:04:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:05:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:06:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:07:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:08:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:09:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:10:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:11:12",
+      "granularity": 60,
+      "value": 30000
+    },
+    {
+      "timestamp": "2017-02-24T07:12:12",
+      "granularity": 60,
+      "value": 30000
+    },
+    {
+      "timestamp": "2017-02-24T07:13:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:14:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:15:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:16:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:17:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:18:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:19:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:20:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:21:12",
+      "granularity": 60,
+      "value": 30000
+    },
+    {
+      "timestamp": "2017-02-24T07:22:12",
+      "granularity": 60,
+      "value": 30000
+    },
+    {
+      "timestamp": "2017-02-24T07:23:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:24:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:25:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:26:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:27:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:28:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:29:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:30:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:31:12",
+      "granularity": 60,
+      "value": 30000
+    },
+    {
+      "timestamp": "2017-02-24T07:32:12",
+      "granularity": 60,
+      "value": 30000
+    },
+    {
+      "timestamp": "2017-02-24T07:33:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:34:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:35:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:36:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:37:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:38:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:39:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:40:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:41:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:42:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:43:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:44:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:45:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:46:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:47:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:48:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:49:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:50:12",
+      "granularity": 60,
+      "value": 400000000
+    },
+    {
+      "timestamp": "2017-02-24T07:51:12",
+      "granularity": 60,
+      "value": 40000000
+    },
+    {
+      "timestamp": "2017-02-24T07:52:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:53:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:54:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:55:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:56:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:57:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:58:12",
+      "granularity": 60,
+      "value": 40000
+    },
+    {
+      "timestamp": "2017-02-24T07:59:12",
+      "granularity": 60,
+      "value": 40000
+    }
+  ]
+}  

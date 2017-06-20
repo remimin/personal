@@ -1,0 +1,13 @@
+type: os.nova.server
+version: 1.0
+properties:
+  flavor: m1.small
+  image: centos7
+  key_name: minmin
+  networks:
+    - network: cc49211f-5c59-497f-a825-ec161fad0875
+  availability_zone: nova:server-31 
+  metadata:
+    "server_group": fe9cecef-235d-4df3-9bde-8cb2157e637d
+  scheduler_hints:
+     group: fe9cecef-235d-4df3-9bde-8cb2157e637d

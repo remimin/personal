@@ -1,0 +1,56 @@
+heat_template_version: 2016-04-08
+description: >
+  A server template is used to AutoScalingGroup resource
+
+parameters:
+  flavor:
+    type: string
+    description: Flavor for the instances
+    constraints:
+      - custom_constraint: nova.flavor
+        description: Must be a flavor known to Nova
+  image:
+    type: string
+    description: >
+      Name or ID of the image to use for the instances
+    constraints:
+      - custom_constraint: glance.image
+        description: Must identify an image known to Glance
+  network:
+    type: string
+    description: The network for the VM
+  pool_id:
+    type: string
+    description: Pool to contact
+  user_data:
+    type: string
+    description: Server user_data
+    defalt: ""
+  metadata:
+    type: json
+    description: Server user metadaa
+  network_id:
+    type: string
+    description: Network used by the server
+  availability_zone:
+    type: string
+    description: Availability zone
+  lb_port:
+    type: number
+    description: lbaas protocol port
+  subnet_id:
+    type: string
+    description: Lbaas member subnet uuid
+resources:
+  server:
+    type: OS::Nova::Server
+    properties:
+      flavor: {get_param: flavor}
+      image: {get_param: image}
+      key_name: {get_param: key_name}
+      metadata: {get_param: metadata}
+      user_data: {get_param: user_data}
+      user_data_format: RAW
+      networks:
+        - network: {get_param: network_id}
+      availability_zone: {get_param: availability_zone}
