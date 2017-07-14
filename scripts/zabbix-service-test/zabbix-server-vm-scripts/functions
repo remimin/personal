@@ -1,0 +1,72 @@
+#!/bin/bash
+function check_ipaddr(){
+  if [ $# -ne 1 ];then
+    echo "Agurement should be IP address."
+    return 1
+  fi
+  ip=$1
+  OLDIFS=${IFS} 
+  IFS='.'
+  ipaddr=($ip)
+  IFS=${OLDIFS}
+  if [ ${#ipaddr[@]} -ne 4 ];then
+    echo "$1 is not ip address."
+    return 1
+  fi
+  for i in `seq 0 3`;do
+   section=${ipaddr[$i]}
+   [[ ${section} =~ ^-?[1-9][0-9]{0,2}$ ]] && [[ ${section} -lt 255 ]] || ([[ ${section} == 0 ]] && [[ $i != 0 ]] \
+   && [[ $i != 3 ]]) || return 1
+  done
+  return 0
+}
+
+## Fuction check mysql connection
+
+function check_mysql_conn(){
+
+cat <<EON >/tmp/my.cnf
+[client]
+user = ${DBUser}
+host = ${DBHost}
+password = "${DBPassword}"
+port = ${DBPort}
+EON
+
+mysql --defaults-file=/tmp/my.cnf -e "status" ${DBName}
+}
+
+function analyze_ip_port(){
+  if [ -z $1 ];then
+    echo "ip:port or ip should be args."
+    return 1
+  fi
+  OLDIFS=${IFS}
+  IFS=':'
+  ipaddr=($1)
+  IFS=${OLDIFS}
+  if [ ${#ipaddr[@]} -gt 2 ];then
+    echo "ERROR format. IP:port or IP"
+    return 1
+  fi
+  ip=${ipaddr[0]} 
+  [[ "${ip}" == '0.0.0.0' ]] || check_ipaddr ${ip} || (echo "ERROR: ip address ${ip}";return 1)
+  port=${ipaddr[1]}
+  [[ -z $port ]] || ([[ ${port} =~ ^-?[1-9][0-9]{0,}$ ]] && [[ ${port} -lt 65536 ]]) || (echo "ERROR port:${port}";return 1)
+  ListenIP=$ip
+  ListenPort=${port:-10051}
+}
+
+function override_value(){
+  conf=$1
+  key=$2
+  value=${!key}
+  if [ ! -z ${value} ];then
+    is_exists=$(cat ${conf}|grep "^${key}=.*" |wc -l)
+    if [ $is_exists -ne 0 ];then
+      sed -i -e 's/${key}=.*/${key}=${value}/g' ${conf}
+    else
+      sed -i "\$a ${key}=${value}" ${conf}
+    fi
+  fi
+}
