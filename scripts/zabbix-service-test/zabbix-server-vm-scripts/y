@@ -90,18 +90,16 @@ function update_admin_passwd(){
     read -p "Input password: " -s first_passwd 
     valid_passwd $first_passwd
     if [ $? -ne 0 ];then
-      log_print "ERROR: Invalid password format."
+      log_print "Change password failed."
       first_passwd=''
       continue
     fi
-    echo ""
     read -p "Verify password: " -s second_passwd
-    [[ "$first_passwd" == "$second_passwd" ]] && break || (log_print "ERROR: The second password doesn't match the first one.";first_passwd='';second_passwd='')
+    [[ "$first_passwd" == "$second_passwd" ]] && break || (log_print "The second password doesn't match the first one.";first_passwd='';second_passwd='')
   done
   mysql --defaults-file=/tmp/my.cnf zabbix -e "update zabbix.users set passwd=md5(\"$second_passwd\") where alias='Admin'"
   if [ $? -ne 0 ];then
    log_print "Change default password failed. Please connect with haihangcloud administor or change password by web UI with default password login."
    return $?
   fi
-  log_print "Change Admin password succeed."
 }

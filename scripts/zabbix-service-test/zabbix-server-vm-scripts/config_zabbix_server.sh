@@ -1,8 +1,12 @@
 #!/bin/bash
 dirname=$(dirname $0)
 
-source $(dirname $0)/functions
-set -x
+source ${dirname}/functions
+DEBUG=${DEBUG:-0}
+if [ $DEBUG -ne 0 ];then
+  set -x
+fi
+
 set -e
 programname=$0
 # zabbix server config file
@@ -12,6 +16,8 @@ zabbix_conf='/etc/zabbix/zabbix_server.conf'
 # owner apache
 zabbix_web_conf='/etc/zabbix/web/zabbix.conf.php'
 zabbix_httpd_conf='/etc/httpd/conf.d/zabbix.conf'
+log_file=${dirname}/zabbix_init.log
+zabbix_api="http://127.0.0.1:80/zabbix/api_jsonrpc.php"
 
 usage(){
   echo "Usage: ${programname##*/} <DBHost> -P <DBPassword> [-d <DBName>] [-u <DBUser>]"
@@ -43,13 +49,13 @@ while [ $# -gt 0 ];do
 done
 
 if [ -z ${DBHost} ];then
-  echo "ERROR: Database host is needed."
+  log_print "ERROR: Database host is needed."
   usage
   exit 1
 fi
 
 if [ -z ${DBPassword} ];then
-  echo "ERROR: Databse password is needed."
+  log_print "ERROR: Databse password is needed."
   usage
   exit 1
 fi
@@ -61,8 +67,8 @@ check_ipaddr ${DBHost}
 if [ ! -z ${Listen} ];then
   analyze_ip_port ${Listen}
 fi
-## Get database information for zabbix server
 
+## Get database information for zabbix server
 DBName=${DBName:-'zabbix'}
 DBUser=${DBUser:-'zabbix'}
 DBPort=${DBPort:-'3306'}
@@ -70,8 +76,7 @@ ListenPort=${ListenPort:-'10051'}
 ListenIP=${ListenIP:-'0.0.0.0'}
 
 
-
-echo "Checking Database Connection....."
+log_print "Checking Database Connection....."
 check_mysql_conn
 
 # Change zabbix server config
@@ -111,12 +116,15 @@ fi
 sed -i "s/# php_value date.timezone.*/php_value date.timezone Asia\/Shanghai/g" ${zabbix_httpd_conf}
 
 ## Load Zabbix Database Schema and Data
-echo "Initialize zabbix databse ......" 
+log_print "Initialize zabbix database ......" 
 zcat /usr/share/doc/zabbix-server-mysql-3.2.6/create.sql.gz | mysql --defaults-file=/tmp/my.cnf zabbix
 cat ${dirname}/import_init_config.sql | mysql --defaults-file=/tmp/my.cnf zabbix
-echo "Done"
-echo "Start zabbix server"
+log_print "Done"
+log_print "Start zabbix server"
 systemctl start zabbix-server
-echo "Start Http service"
+log_print "Start Http service"
 systemctl start httpd
+systemctl status zabbix-server
+systemctl status httpd
+update_admin_passwd
 rm -f /tmp/my.cnf
