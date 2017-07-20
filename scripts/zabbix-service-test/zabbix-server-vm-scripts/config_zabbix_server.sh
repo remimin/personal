@@ -1,7 +1,7 @@
 #!/bin/bash
-dirname=$(dirname 0)
+dirname=$(dirname $0)
 
-source ${dirname}/functions
+source $(dirname $0)/functions
 set -x
 set -e
 programname=$0
@@ -66,7 +66,7 @@ fi
 DBName=${DBName:-'zabbix'}
 DBUser=${DBUser:-'zabbix'}
 DBPort=${DBPort:-'3306'}
-ListenPort=${ListenPort:-'15001'}
+ListenPort=${ListenPort:-'10051'}
 ListenIP=${ListenIP:-'0.0.0.0'}
 
 

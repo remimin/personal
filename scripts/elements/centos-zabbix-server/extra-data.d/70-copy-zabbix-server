@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+set -o xtrace
+source $_LIB/die
+[ -n "$TMP_HOOKS_PATH" ] || die "Temp hook path not set"
+[ -n "${ZABBIX_RPM_PATH}" ] || die " ZABBIX_RPM_PATH path not set"
+ls -alh ${ZABBIX_RPM_PATH}
+mkdir -p  ${TMP_HOOKS_PATH}/zabbix_rpm
+sudo -Hiu ${HOST_USERNAME}  cp -r ${ZABBIX_RPM_PATH}/* ${TMP_HOOKS_PATH}/zabbix_rpm
