@@ -103,5 +103,6 @@ function update_admin_passwd(){
    log_print "Change default password failed. Please connect with haihangcloud administor or change password by web UI with default password login."
    return $?
   fi
+  echo ""
   log_print "Change Admin password succeed."
 }

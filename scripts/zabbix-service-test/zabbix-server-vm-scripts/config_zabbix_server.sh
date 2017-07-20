@@ -119,6 +119,7 @@ sed -i "s/# php_value date.timezone.*/php_value date.timezone Asia\/Shanghai/g" 
 log_print "Initialize zabbix database ......" 
 zcat /usr/share/doc/zabbix-server-mysql-3.2.6/create.sql.gz | mysql --defaults-file=/tmp/my.cnf zabbix
 cat ${dirname}/import_init_config.sql | mysql --defaults-file=/tmp/my.cnf zabbix
+mysql --defaults-file=/tmp/my.cnf zabbix -e "update zabbix.users set lang='zh_CN' where alias='Admin'"
 log_print "Done"
 log_print "Start zabbix server"
 systemctl start zabbix-server
