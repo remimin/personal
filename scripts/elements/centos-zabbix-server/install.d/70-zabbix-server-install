@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+set -o xtrace
+set -x
+
+TMP_HOOKS_DIR="/tmp/in_target.d"
+cd ${TMP_HOOKS_DIR}/zabbix_rpm
+ls -alh  ${TMP_HOOKS_DIR}/zabbix_rpm
+yum -y localinstall *.rpm
+set +x

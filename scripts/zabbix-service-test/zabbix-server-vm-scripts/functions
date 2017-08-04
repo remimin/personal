@@ -106,3 +106,44 @@ function update_admin_passwd(){
   echo ""
   log_print "Change Admin password succeed."
 }
+
+function login_zabbix(){
+  user=${1:-"Admin"}
+  passwd=${2:-"zabbix"}
+  cat >/tmp/login <<EON
+{
+    "jsonrpc": "2.0",
+    "method": "user.login",
+    "params": {
+        "user": "$user",
+        "password": "$passwd"
+    },
+    "id": 5111,
+    "auth": null
+}
+EON
+curl -XPOST ${zabbix_api} -H 'Content-Type: application/json-rpc' -d @/tmp/login 2>/dev/null | ${dirname}/jq ".result" | tr -d '"'
+}
+
+function generate_request(){
+  auth=$1
+  template=$2
+  request=$3
+  cp $template ${template}.tmp
+  sed -i 's#[[:blank:]]##g;' ${template}.tmp
+  sed -i ':a;N;$!ba;s#\n# #g' ${template}.tmp
+  sed -i 's#\"#\\\\\"#g' ${template}.tmp
+  string=$(cat "${template}.tmp")
+  sed -i "s#{TEMPLATE}#${string}#g;s#{AUTH}#${auth}#g" ${request}
+}
+
+function import_template(){
+  user=$1
+  passwd=$2
+  template=$3
+  auth=$(login_zabbix $user $passwd)
+  cp ${dirname}/request.template ${dirname}/request
+  generate_request ${auth} "${template}" "${dirname}/request"
+  cat ${dirname}/request
+  curl -XPOST ${zabbix_api} -H 'Content-Type: application/json-rpc' -d @${dirname}/request
+}

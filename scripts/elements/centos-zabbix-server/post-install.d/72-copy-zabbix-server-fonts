@@ -1,0 +1,4 @@
+#!/bin/bash
+TMP_HOOKS_PATH="/tmp/in_target.d"
+cp ${TMP_HOOKS_PATH}/zabbix_fonts/simsun.ttf /usr/share/zabbix/fonts/
+sed -i 's/graphfont/simsun/g' /usr/share/zabbix/include/defines.inc.php

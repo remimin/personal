@@ -1,0 +1,24 @@
+{
+    "jsonrpc": "2.0",
+    "method": "configuration.import",
+    "params": {
+        "format": "xml",
+        "rules": {
+            "hosts": {
+                "createMissing": true,
+                "updateExisting": true
+            },
+            "groups": {
+                "createMissing": true,
+                "updateExisting": true
+            },
+            "templates": {
+                "createMissing": true,
+                "updateExisting": true
+            }
+        },
+        "source": "{TEMPLATE}"
+    },
+    "auth": "{AUTH}",
+    "id": 1
+}

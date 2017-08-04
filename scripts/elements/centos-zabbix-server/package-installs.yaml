@@ -1,0 +1,2 @@
+mysql:
+  phase: post-install.d

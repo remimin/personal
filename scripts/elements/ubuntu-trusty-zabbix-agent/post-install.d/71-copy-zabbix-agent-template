@@ -1,0 +1,7 @@
+#!/bin/bash
+set -x
+set -e
+TMP_HOOKS_DIR="/tmp/in_target.d"
+rm -rf /etc/zabbix
+cp -r ${TMP_HOOKS_DIR}/zabbix_agent_template /etc/zabbix
+chown -R zabbix:zabbix /etc/zabbix

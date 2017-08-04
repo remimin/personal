@@ -1,0 +1,1 @@
+bash -x ./deploy_zabbix_server.sh zabbix_server_05 fde7e839-ab8c-4a2f-a7f5-2ace49c9eee1 f30f8be3-c0dd-4695-a345-420f1199aa7e minmin

@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+set -o xtrace
+set -x
+TMP_HOOKS_DIR="/tmp/in_target.d"
+cd ${TMP_HOOKS_DIR}/zabbix_agent_packages
+ls -alh  ${TMP_HOOKS_DIR}/zabbix_agent_packages
+dpkg -i *.deb
+set +x

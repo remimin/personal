@@ -1,0 +1,8 @@
+#!/bin/bash
+set -x
+set -e
+
+source $_LIB/die
+[ -n "$TMP_HOOKS_PATH" ] || die "Temp hook path not set"
+[ -n "${ZABBIX_FONTS_PATH}" || die "ZABBIX_FONTS_PATH not set"
+sudo -Hiu ${HOST_USERNAME}  cp -r ${ZABBIX_FONTS_PATH}/* ${TMP_HOOKS_PATH}/zabbix_fonts

@@ -1,0 +1,3 @@
+#!/bin/bash
+TMP_HOOKS_DIR="/tmp/in_target.d"
+mv ${TMP_HOOKS_DIR}/zabbix_scripts /root/

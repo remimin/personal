@@ -145,7 +145,7 @@ if [ $phrase == 'open_port' ];then
   ## Add db instance ssh port and zabbix agent port
   trove_sg_id=$(get_security_groups ${trove_nova_id})
   add_port_accessable 22 $trove_sg_id
-  add_port_accessable 10050 $trove_sg_id
+  # add_port_accessable 10050 $trove_sg_id
   phrase='config_zabbix_server'
 fi
 
@@ -165,9 +165,9 @@ if [ $phrase == 'config_zabbix_server' ];then
   fi
 
   config_zabbix_server $NETID $zabbix_server_fixed_ip "${KEYPATH}/$keyname" $zabbix_opts
-  phrase='config_zabbix_agent'
-fi
-if [ $phrase == 'config_zabbix_agent' ];then
-  config_zabbix_agent $NETID $trove_fixed_ip "${KEYPATH}/$trovekeyname" $zabbix_server_fixed_ip
   phrase='done'
 fi
+#if [ $phrase == 'config_zabbix_agent' ];then
+#  config_zabbix_agent $NETID $trove_fixed_ip "${KEYPATH}/$trovekeyname" $zabbix_server_fixed_ip
+#  phrase='done'
+#fi

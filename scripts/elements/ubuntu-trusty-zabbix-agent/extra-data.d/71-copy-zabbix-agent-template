@@ -1,0 +1,7 @@
+#!/bin/bash
+set -x
+set -e
+source $_LIB/die
+[ -n "$TMP_HOOKS_PATH" ] || die "Temp hook path not set"
+[ -n "$ZABBIX_AGENT_TEMPLATE" ] || die "ZABBIX_AGENT_TEMPLATE not set"
+sudo -Hiu ${HOST_USERNAME} cp -r ${ZABBIX_AGENT_TEMPLATE} ${TMP_HOOKS_PATH}/
