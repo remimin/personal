@@ -962,4 +962,5 @@ INSERT INTO `operations` (`operationtype`, `actionid`, `recovery`, `operationid`
 INSERT INTO `opgroup` (`operationid`, `groupid`, `opgroupid`) VALUES ('15','10','4');
 INSERT INTO `optemplate` (`operationid`, `templateid`, `optemplateid`) VALUES ('16','10109','8');
 INSERT INTO `conditions` (`conditiontype`, `operator`, `value`, `value2`, `actionid`, `conditionid`) VALUES ('24','2','trove redis','','9','11');
+UPDATE `config` set config.refresh_unsupported=60 where `configid`=1;
 COMMIT;;
