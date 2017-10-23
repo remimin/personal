@@ -1,0 +1,49 @@
+heat_template_version: 2013-05-23
+description: InstanceVolume
+parameters:
+  image_id:
+    type: string
+    description: image UUID
+    default: ac89d3af-d647-4e54-880a-acf903eb0cbc
+  key_name:
+    type: string
+    description: key pair name
+    default: minmin
+  instance_type:
+    type: string
+    description: instance flavor
+    default: m1.small
+  network_id:
+    type: string
+    description: instance network uuid
+    default: f30f8be3-c0dd-4695-a345-420f1199aa7e
+  availability_zone:
+    type: string
+    description: availability zone
+    default: "nova"
+  volume_size:
+    type: number
+    description: cinder volume size
+    default: 1
+resources:
+  cinder_volume:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: volume_size }
+      metadata: {"stack": {get_param: "OS::stack_id"}}
+  nova_instance:
+    type: OS::Nova::Server
+    properties:
+      availability_zone: { get_param: availability_zone }
+      image: { get_param: image_id }
+      flavor: { get_param: instance_type }
+      key_name: { get_param: key_name }
+      networks:
+        - network: {get_param: network_id}
+
+      metadata: {"stack": {get_param: "OS::stack_id"}}
+  cinder_volume_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      volume_id: { get_resource: cinder_volume }
+      instance_uuid: { get_resource: nova_instance }
