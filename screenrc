@@ -21,7 +21,7 @@ term xterm-256color
 defscrollback 30000
 
 # New mail notification
-backtick 101 30 15 $HOME/bin/mailstatus.sh
+#backtick 101 30 15 $HOME/bin/mailstatus.sh
 
 hardstatus alwayslastline 
 # Very nice tabbed colored hardstatus line

@@ -1,0 +1,11 @@
+# pip install virtualenvwrapper
+pip install virtualenvwrapper
+
+# create virtualenv workon home directory
+./create_virtualenv.sh <VIRTUAL ENV DIRNAME>
+
+# create personal virtual enviroment
+mkvirtualenv ${myenv}
+
+# check virtual enviroment
+workon
