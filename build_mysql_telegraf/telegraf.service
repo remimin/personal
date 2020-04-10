@@ -1,0 +1,18 @@
+[Unit]
+Description=The plugin-driven server agent for reporting metrics into InfluxDB
+Documentation=https://github.com/influxdata/telegraf
+After=network.target mysqld.service openstack-trove-guestagent.service
+PartOf=mysqld.service
+
+[Service]
+EnvironmentFile=-/etc/default/telegraf
+User=root
+ExecStartPre=/usr/bin/bash /root/generate_mysql.sh
+ExecStart=/usr/bin/telegraf -config /etc/telegraf/telegraf.conf -config-directory /etc/telegraf/telegraf.d $TELEGRAF_OPTS
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartForceExitStatus=SIGPIPE
+KillMode=control-group
+
+[Install]
+WantedBy=multi-user.target mysqld.service
